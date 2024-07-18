@@ -9,7 +9,18 @@
 <body>
   <div class="container">
     <h1>Todo List</h1>
+    <label class="switch">
+      <input type="checkbox" id="dark-mode-toggle">
+      <span class="slider round"></span>
+    </label>
     <input type="text" id="task-input" placeholder="Enter a task...">
+    <input type="date" id="task-date" placeholder="Select date">
+    <input type="time" id="task-time" placeholder="Select time">
+    <select id="task-priority">
+      <option value="Low">Low Priority</option>
+      <option value="Medium">Medium Priority</option>
+      <option value="High">High Priority</option>
+    </select>
     <button id="add-task">Add</button>
     <button id="save-task" style="display: none;">Save</button>
     <input type="hidden" id="save-index" value="">
