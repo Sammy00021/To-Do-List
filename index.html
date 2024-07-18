@@ -9,17 +9,22 @@
 <body>
   <div class="container">
     <h1>Todo List</h1>
-    <label class="switch">
+    <div class="toggle-container">
       <input type="checkbox" id="dark-mode-toggle">
-      <span class="slider round"></span>
-    </label>
+      <label for="dark-mode-toggle" class="toggle-label">
+        <div class="toggle-ball">
+          <span class="sun">☀️</span>
+          <span class="moon">🌙</span>
+        </div>
+      </label>
+    </div>
     <p>Enter a task:</p>
     <input type="text" id="task-input" placeholder="Enter a task...">
-    <p>Select Date:</p>
+    <p>Select due date:</p>
     <input type="date" id="task-date" placeholder="Select date">
-    <p>Select Time:</p>
+    <p>Select due time:</p>
     <input type="time" id="task-time" placeholder="Select time">
-    <p>Choose Task Priority:</p>
+    <p>Choose Priority</p>
     <select id="task-priority">
       <option value="Low">Low Priority</option>
       <option value="Medium">Medium Priority</option>

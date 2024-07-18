@@ -55,6 +55,7 @@ function addTask(task, date, time, priority, done = false, comment = "") {
     <span>${task} (Due: ${new Date(date).toLocaleDateString()} ${time}, Priority: ${priority})</span>
     <span class="due-time">${time}</span>
     <span class="comment">${comment}</span>
+    <span class="edit">\u270E</span>
     <span class="close">\u00D7</span>
   `;
 
@@ -63,26 +64,28 @@ function addTask(task, date, time, priority, done = false, comment = "") {
   }
 
   const closeSpan = li.querySelector(".close");
+  const editSpan = li.querySelector(".edit");
 
   closeSpan.addEventListener("click", function() {
     taskList.removeChild(li);
     updateStorage();
   });
 
-  li.addEventListener("click", function() {
-    li.classList.toggle("done");
-
-    if (li.classList.contains("done") && !li.querySelector(".comment").textContent) {
-      const commentText = prompt("Add a comment about the task:");
-      li.querySelector(".comment").textContent = commentText;
-    }
-
-    updateStorage();
+  editSpan.addEventListener("click", function() {
+    edit([...taskList.children].indexOf(li));
   });
 
-  li.addEventListener("dblclick", function() {
-    const index = Array.from(taskList.children).indexOf(li);
-    edit(index);
+  li.addEventListener("click", function(event) {
+    if (event.target === li) {
+      li.classList.toggle("done");
+
+      if (li.classList.contains("done") && !li.querySelector(".comment").textContent) {
+        const commentText = prompt("Add a comment about the task:");
+        li.querySelector(".comment").textContent = commentText;
+      }
+
+      updateStorage();
+    }
   });
 
   taskList.appendChild(li);
@@ -183,5 +186,3 @@ function save() {
   saveTaskButton.style.display = "none";
   addTaskButton.style.display = "block";
 }
-
-
