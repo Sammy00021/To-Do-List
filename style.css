@@ -17,10 +17,11 @@
 h1 {
   text-align: center;
   color: #f44336;
+  font-size: 60px;
 }
 
 input[type="text"], #task-date, #task-time, #task-priority {
-  width: calc(100% - 130px);
+  width: calc(100% - 50px);
   padding: 10px;
   margin: 5px 0;
   border: 1px solid #ccc;
@@ -29,7 +30,7 @@ input[type="text"], #task-date, #task-time, #task-priority {
 }
 
 #task-date, #task-time, #task-priority {
-  width: calc(100% - 110px);
+  width: calc(100% - 50px);
 }
 
 button {
@@ -126,6 +127,18 @@ li .comment.dark-mode {
   position: absolute;
   top: 20px;
   right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+#mode-label {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #000;
+}
+
+body.dark-mode #mode-label {
+  color: #fff;
 }
 
 .toggle-label {

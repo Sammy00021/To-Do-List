@@ -7,6 +7,7 @@ const saveTaskButton = document.getElementById("save-task");
 const saveIndex = document.getElementById("save-index");
 const taskList = document.getElementById("task-list");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
+const modeLabel = document.getElementById("mode-label");
 
 loadTasks();
 
@@ -44,8 +45,75 @@ darkModeToggle.addEventListener("change", function() {
     task.classList.toggle("dark-mode");
   });
 
+  updateModeLabel();
   updateStorage();
 });
+
+function updateModeLabel() {
+  if (darkModeToggle.checked) {
+    modeLabel.textContent = "Dark Mode";
+  } else {
+    modeLabel.textContent = "Light Mode";
+  }
+}
+
+function loadTasks() {
+  const tasks = localStorage.getItem("tasks");
+  const darkMode = localStorage.getItem("dark-mode");
+
+  if (darkMode === "enabled") {
+    darkModeToggle.checked = true;
+    document.body.classList.add("dark-mode");
+    document.querySelector(".container").classList.add("dark-mode");
+    taskInput.classList.add("dark-mode");
+    taskDate.classList.add("dark-mode");
+    taskTime.classList.add("dark-mode");
+    taskPriority.classList.add("dark-mode");
+    addTaskButton.classList.add("dark-mode");
+    saveTaskButton.classList.add("dark-mode");
+  }
+
+  updateModeLabel();
+
+  if (tasks) {
+    const tasksArray = JSON.parse(tasks);
+
+    for (const task of tasksArray) {
+      addTask(task.text, task.date, task.time, task.priority, task.done, task.comment);
+    }
+  }
+}
+
+function updateStorage() {
+  const listItems = taskList.querySelectorAll("li");
+
+  const tasksArray = [];
+
+  for (const listItem of listItems) {
+    const taskObject = {};
+    const taskSpan = listItem.querySelector("span:first-child");
+    const commentSpan = listItem.querySelector(".comment");
+    const dueTimeSpan = listItem.querySelector(".due-time");
+
+    const taskText = taskSpan.textContent.split(" (Due: ")[0];
+    const taskDate = new Date(taskSpan.textContent.split(" (Due: ")[1].split(" ")[0]).toISOString().split("T")[0];
+    const taskTime = dueTimeSpan.textContent;
+    const taskPriority = taskSpan.textContent.split("Priority: ")[1].slice(0, -1);
+
+    taskObject.text = taskText;
+    taskObject.date = taskDate;
+    taskObject.time = taskTime;
+    taskObject.priority = taskPriority;
+    taskObject.done = listItem.classList.contains("done");
+    taskObject.comment = commentSpan.textContent;
+
+    tasksArray.push(taskObject);
+  }
+
+  const tasks = JSON.stringify(tasksArray);
+  localStorage.setItem("tasks", tasks);
+  localStorage.setItem("dark-mode", darkModeToggle.checked ? "enabled" : "disabled");
+}
 
 function addTask(task, date, time, priority, done = false, comment = "") {
   const li = document.createElement("li");
@@ -90,62 +158,6 @@ function addTask(task, date, time, priority, done = false, comment = "") {
 
   taskList.appendChild(li);
   updateStorage();
-}
-
-function loadTasks() {
-  const tasks = localStorage.getItem("tasks");
-  const darkMode = localStorage.getItem("dark-mode");
-
-  if (darkMode === "enabled") {
-    darkModeToggle.checked = true;
-    document.body.classList.add("dark-mode");
-    document.querySelector(".container").classList.add("dark-mode");
-    taskInput.classList.add("dark-mode");
-    taskDate.classList.add("dark-mode");
-    taskTime.classList.add("dark-mode");
-    taskPriority.classList.add("dark-mode");
-    addTaskButton.classList.add("dark-mode");
-    saveTaskButton.classList.add("dark-mode");
-  }
-
-  if (tasks) {
-    const tasksArray = JSON.parse(tasks);
-
-    for (const task of tasksArray) {
-      addTask(task.text, task.date, task.time, task.priority, task.done, task.comment);
-    }
-  }
-}
-
-function updateStorage() {
-  const listItems = taskList.querySelectorAll("li");
-
-  const tasksArray = [];
-
-  for (const listItem of listItems) {
-    const taskObject = {};
-    const taskSpan = listItem.querySelector("span:first-child");
-    const commentSpan = listItem.querySelector(".comment");
-    const dueTimeSpan = listItem.querySelector(".due-time");
-
-    const taskText = taskSpan.textContent.split(" (Due: ")[0];
-    const taskDate = new Date(taskSpan.textContent.split(" (Due: ")[1].split(" ")[0]).toISOString().split("T")[0];
-    const taskTime = dueTimeSpan.textContent;
-    const taskPriority = taskSpan.textContent.split("Priority: ")[1].slice(0, -1);
-
-    taskObject.text = taskText;
-    taskObject.date = taskDate;
-    taskObject.time = taskTime;
-    taskObject.priority = taskPriority;
-    taskObject.done = listItem.classList.contains("done");
-    taskObject.comment = commentSpan.textContent;
-
-    tasksArray.push(taskObject);
-  }
-
-  const tasks = JSON.stringify(tasksArray);
-  localStorage.setItem("tasks", tasks);
-  localStorage.setItem("dark-mode", darkModeToggle.checked ? "enabled" : "disabled");
 }
 
 function edit(index) {
