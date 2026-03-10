@@ -1,3 +1,9 @@
+const currentUser = localStorage.getItem("currentUser");
+
+if(!currentUser){
+window.location.href = "login.html";
+}
+
 const taskInput = document.getElementById("task-input");
 const taskDate = document.getElementById("task-date");
 const taskTime = document.getElementById("task-time");
@@ -58,7 +64,7 @@ function updateModeLabel() {
 }
 
 function loadTasks() {
-  const tasks = localStorage.getItem("tasks");
+  const tasks = localStorage.getItem(currentUser + "_tasks");
   const darkMode = localStorage.getItem("dark-mode");
 
   if (darkMode === "enabled") {
@@ -111,7 +117,7 @@ function updateStorage() {
   }
 
   const tasks = JSON.stringify(tasksArray);
-  localStorage.setItem("tasks", tasks);
+  localStorage.setItem(currentUser + "_tasks", tasks);
   localStorage.setItem("dark-mode", darkModeToggle.checked ? "enabled" : "disabled");
 }
 
@@ -197,4 +203,9 @@ function save() {
 
   saveTaskButton.style.display = "none";
   addTaskButton.style.display = "block";
+}
+
+function logout(){
+localStorage.removeItem("currentUser");
+window.location.href = "login.html";
 }
