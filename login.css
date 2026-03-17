@@ -13,7 +13,6 @@ justify-content:center;
 background: linear-gradient(135deg,#ff416c,#ff4b2b);
 }
 
-/* container */
 
 .login-container{
 width:100%;
@@ -22,7 +21,6 @@ align-items:center;
 justify-content:center;
 }
 
-/* card */
 
 .login-card{
 
@@ -49,7 +47,6 @@ opacity:0.8;
 margin-bottom:30px;
 }
 
-/* input fields */
 
 .input-group{
 position:relative;
@@ -88,7 +85,6 @@ padding:2px 6px;
 border-radius:4px;
 }
 
-/* buttons */
 
 .login-btn{
 
@@ -134,7 +130,6 @@ background:white;
 color:#ff416c;
 }
 
-/* message */
 
 #message{
 margin-top:15px;
