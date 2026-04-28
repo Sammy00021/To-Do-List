@@ -3,44 +3,208 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo List App</title>
-  <button onclick="logout()">Logout</button>
+  <title>Tasklog — Your Tasks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Todo List</h1>
-    <div class="toggle-container">
-      <input type="checkbox" id="dark-mode-toggle">
-      <label for="dark-mode-toggle" class="toggle-label">
-        <div class="toggle-ball">
-          <span class="sun">☀️</span>
-          <span class="moon">🌙</span>
-        </div>
-      </label>
-      <span id="mode-label">Light Mode</span>
-    </div>
-    <p>Enter a task:</p>
-    <input type="text" id="task-input" placeholder="Enter a task...">
-    <br>
-    <p>Select due date:</p>
-    <input type="date" id="task-date" placeholder="Select date">
-    <br>
-    <p>Select due time:</p>
-    <input type="time" id="task-time" placeholder="Select time">
-    <br>
-    <p>Choose Priority</p>
-    <select id="task-priority">
-      <option value="Low">Low Priority</option>
-      <option value="Medium">Medium Priority</option>
-      <option value="High">High Priority</option>
-    </select>
-    <br>
-    <button id="add-task">Add</button>
-    <button id="save-task" style="display: none;">Save</button>
-    <input type="hidden" id="save-index" value="">
-    <ul id="task-list"></ul>
+
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
   </div>
+
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">✓</div>
+        <span class="brand-name">Tasklog</span>
+      </div>
+
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar">U</div>
+        <div class="user-info">
+          <span class="user-name" id="user-name-display">User</span>
+          <span class="user-sub">Active</span>
+        </div>
+        <button class="logout-btn" onclick="logout()" title="Logout">↩</button>
+      </div>
+
+      <nav class="filter-nav">
+        <p class="nav-label">View</p>
+        <button class="nav-item active" data-filter="all" onclick="setFilter('all', this)">
+          <span class="nav-icon">📋</span> All Tasks
+          <span class="nav-count" id="count-all">0</span>
+        </button>
+        <button class="nav-item" data-filter="active" onclick="setFilter('active', this)">
+          <span class="nav-icon">⚡</span> Active
+          <span class="nav-count" id="count-active">0</span>
+        </button>
+        <button class="nav-item" data-filter="done" onclick="setFilter('done', this)">
+          <span class="nav-icon">✅</span> Completed
+          <span class="nav-count" id="count-done">0</span>
+        </button>
+
+        <p class="nav-label" style="margin-top:16px">Priority</p>
+        <button class="nav-item" data-filter="high" onclick="setFilter('high', this)">
+          <span class="nav-icon">🔴</span> High
+          <span class="nav-count" id="count-high">0</span>
+        </button>
+        <button class="nav-item" data-filter="medium" onclick="setFilter('medium', this)">
+          <span class="nav-icon">🟡</span> Medium
+          <span class="nav-count" id="count-medium">0</span>
+        </button>
+        <button class="nav-item" data-filter="low" onclick="setFilter('low', this)">
+          <span class="nav-icon">🟢</span> Low
+          <span class="nav-count" id="count-low">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle">
+          <span class="theme-icon">☀️</span>
+          <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+          <label for="dark-mode-toggle" class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </label>
+          <span class="theme-icon">🌙</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1 class="page-title" id="filter-title">All Tasks</h1>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <span class="progress-label" id="progress-label">0 of 0 done</span>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search tasks…" oninput="renderTasks()">
+        </div>
+      </div>
+
+      <!-- Add task panel -->
+      <div class="add-panel">
+        <div class="add-panel-row">
+          <input type="text" id="task-input" placeholder="What needs to be done?" class="task-name-input">
+        </div>
+        <div class="add-panel-row add-panel-meta">
+          <div class="meta-field">
+            <label>📅 Due Date</label>
+            <input type="date" id="task-date">
+          </div>
+          <div class="meta-field">
+            <label>⏰ Time</label>
+            <input type="time" id="task-time">
+          </div>
+          <div class="meta-field">
+            <label>🏷 Priority</label>
+            <select id="task-priority">
+              <option value="Low">🟢 Low</option>
+              <option value="Medium">🟡 Medium</option>
+              <option value="High">🔴 High</option>
+            </select>
+          </div>
+          <div class="meta-field">
+            <label>📁 Category</label>
+            <select id="task-category">
+              <option value="General">General</option>
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Health">Health</option>
+              <option value="Shopping">Shopping</option>
+            </select>
+          </div>
+        </div>
+        <div class="add-panel-row add-panel-actions">
+          <input type="text" id="task-note" placeholder="Add a note (optional)…" class="note-input">
+          <button id="add-task-btn" onclick="handleAdd()">
+            <span id="add-btn-label">+ Add Task</span>
+          </button>
+          <button id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">✕ Cancel</button>
+          <input type="hidden" id="save-index" value="">
+        </div>
+      </div>
+
+      <!-- Sort bar -->
+      <div class="sort-bar">
+        <span class="sort-label">Sort by:</span>
+        <button class="sort-btn active" data-sort="added" onclick="setSort('added', this)">Date Added</button>
+        <button class="sort-btn" data-sort="due" onclick="setSort('due', this)">Due Date</button>
+        <button class="sort-btn" data-sort="priority" onclick="setSort('priority', this)">Priority</button>
+        <button class="sort-btn" data-sort="name" onclick="setSort('name', this)">Name</button>
+        <span style="flex:1"></span>
+        <button class="clear-done-btn" onclick="clearCompleted()">Clear completed</button>
+      </div>
+
+      <!-- Task list -->
+      <ul id="task-list"></ul>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state" style="display:none">
+        <div class="empty-icon">🎉</div>
+        <p class="empty-title">All clear!</p>
+        <p class="empty-sub">No tasks here. Add one above.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Edit modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal">
+      <h3 class="modal-title">Edit Task</h3>
+      <input type="text" id="modal-task" placeholder="Task name" class="modal-input">
+      <div class="modal-row">
+        <div class="meta-field">
+          <label>📅 Due Date</label>
+          <input type="date" id="modal-date" class="modal-input-sm">
+        </div>
+        <div class="meta-field">
+          <label>⏰ Time</label>
+          <input type="time" id="modal-time" class="modal-input-sm">
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="meta-field">
+          <label>🏷 Priority</label>
+          <select id="modal-priority" class="modal-input-sm">
+            <option value="Low">🟢 Low</option>
+            <option value="Medium">🟡 Medium</option>
+            <option value="High">🔴 High</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>📁 Category</label>
+          <select id="modal-category" class="modal-input-sm">
+            <option value="General">General</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Health">Health</option>
+            <option value="Shopping">Shopping</option>
+          </select>
+        </div>
+      </div>
+      <div class="meta-field" style="margin-top:12px">
+        <label>📝 Note</label>
+        <input type="text" id="modal-note" placeholder="Add a note…" class="modal-input">
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-save" onclick="saveModal()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

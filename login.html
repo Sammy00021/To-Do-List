@@ -3,40 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Todo App Login</title>
+<title>Tasklog — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="login.css">
 </head>
-
 <body>
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
 
-<div class="login-container">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-icon">✓</div>
+        <h1 class="brand-name">Tasklog</h1>
+      </div>
 
-<div class="login-card">
+      <div class="tab-switch">
+        <button class="tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+        <button class="tab" id="tab-register" onclick="switchTab('register')">Create Account</button>
+        <div class="tab-indicator" id="tab-indicator"></div>
+      </div>
 
-<h2>Welcome Back</h2>
-<p class="subtitle">Login to your Todo Account</p>
+      <div class="form-section" id="form-section">
+        <div class="input-group">
+          <span class="input-icon">👤</span>
+          <input type="text" id="username" placeholder="Username" autocomplete="username">
+        </div>
+        <div class="input-group">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+          <span class="toggle-pw" onclick="togglePw()">👁</span>
+        </div>
 
-<div class="input-group">
-<input type="text" id="username" required>
-<label>Username</label>
-</div>
+        <button class="action-btn" id="main-btn" onclick="handleMain()">
+          <span id="btn-label">Sign In</span>
+          <span class="btn-arrow">→</span>
+        </button>
 
-<div class="input-group">
-<input type="password" id="password" required>
-<label>Password</label>
-</div>
-
-<button class="login-btn" onclick="login()">Login</button>
-
-<button class="register-btn" onclick="register()">Create Account</button>
-
-<p id="message"></p>
-
-</div>
-
-</div>
+        <p id="message" class="message"></p>
+      </div>
+    </div>
+  </div>
 
 <script src="login.js"></script>
-
 </body>
 </html>
